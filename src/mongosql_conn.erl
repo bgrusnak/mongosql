@@ -2,7 +2,7 @@
 %% @doc MongoSQL connection
 -module(mongosql_conn).
 
--export([start/2, start/3, fetch/3, stop/1]).
+-export([start/3, fetch/3, stop/1]).%start/2, 
 
 -define(POOL_SIZE, 3).
 
@@ -108,10 +108,12 @@ bin_to_str(S) -> S.
 
 %% @doc Connect to database
 start(Host, Port, Database) ->
-    start([{Host, Port}], Database).
+    emongo:add_pool(make_ref(), Host, Port, Database, ?POOL_SIZE).
 
-start(Urls, Database) when is_list(Urls) ->
-    emongo:add_pool(make_ref(), Urls, Database, ?POOL_SIZE).
+%    start([{Host, Port}], Database).
+
+%start(Urls, Database) when is_list(Urls) ->
+%    emongo:add_pool(make_ref(), Urls, Database, ?POOL_SIZE).
 
 %% @doc Execute SQL query
 fetch(PoolId, Query, Sync) ->
