@@ -37,7 +37,7 @@ squery(Pool, {find, Coll, Selector, Options},_) ->
     {selected, selected_rows(Norm, Fields), row_values(Norm, Fields)};
 
 squery(Pool, {update, Coll, Selector, Doc}, false) -> 
-    emongo:update(Pool, Coll, Selector, Doc, false, true),
+    emongo:update(Pool, Coll, Selector, Doc),
     {updated, 1};
 
 squery(Pool, {update, Coll, Selector, Doc}, true) -> 
@@ -108,7 +108,8 @@ bin_to_str(S) -> S.
 
 %% @doc Connect to database
 start(Host, Port, Database) ->
-    emongo:add_pool(make_ref(), Host, Port, Database, ?POOL_SIZE).
+    emongo:add_pool(mongosql_pool, Host, Port, Database, ?POOL_SIZE),
+    {ok, mongosql_pool}.
 
 %    start([{Host, Port}], Database).
 
